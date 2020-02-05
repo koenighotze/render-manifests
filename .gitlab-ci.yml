@@ -1,0 +1,19 @@
+image:
+  name: node:12
+
+variables:
+  IMAGE_NAME: build-support/render
+  VERSION: ${CI_COMMIT_SHA}
+  PROJECT_URL: ${CI_PROJECT_URL}
+
+stages:
+  - build
+
+google-cloud-build:
+  stage: build
+  image: google/cloud-sdk
+  script:
+    - echo $GCP_SERVICE_CREDS > .gcp_credentials.json
+    - gcloud auth activate-service-account --key-file=.gcp_credentials.json
+    - gcloud config set project $GCP_PROJECT
+    - gcloud builds submit --config cloudbuild.yml --substitutions="_DOCKER_REGISTRY=${DOCKER_REGISTRY},_IMAGE_NAME=${IMAGE_NAME},_REVISION=${VERSION},_SOURCE=${PROJECT_URL}"  .

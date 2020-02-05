@@ -1,0 +1,21 @@
+steps:
+- name: gcr.io/cloud-builders/docker
+  args: [
+    'build',
+    '-t',
+    '${_DOCKER_REGISTRY}/${PROJECT_ID}/${_IMAGE_NAME}:1.0',
+    '--build-arg', 'REVISION="${_REVISION}"',
+    '--build-arg', 'SOURCE="${_SOURCE}"',
+    '.'
+  ]
+  id: docker-build
+  timeout: 600s
+
+- name: 'gcr.io/cloud-builders/docker'
+  args: [
+    'push',
+    '${_DOCKER_REGISTRY}/${PROJECT_ID}/${_IMAGE_NAME}:1.0'
+  ]
+  waitFor:
+    - docker-build
+logsBucket: gs://gpp-cloudbuild/logs
