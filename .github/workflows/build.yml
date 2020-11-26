@@ -45,6 +45,7 @@ jobs:
           tags: ${{ steps.docker_meta.outputs.tags }}
           labels: ${{ steps.docker_meta.outputs.labels }}
           build-args: |
+            REF=${{github.ref}}
             NAME=koenighotze/render-manifest
             DESCRIPTION=Tool for rendering manifests using envsubst
             VERSION=${{ steps.docker_meta.outputs.version }}
