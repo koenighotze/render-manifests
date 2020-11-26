@@ -1,0 +1,53 @@
+name: build
+on: [push]
+jobs:
+  lint:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          docker run -i hadolint/hadolint < Dockerfile
+
+  build:
+    runs-on: ubuntu-20.04
+    needs: lint
+    steps:
+      - uses: actions/checkout@v2
+      - name: Docker meta
+        id: docker_meta
+        uses: crazy-max/ghaction-docker-meta@v1
+        with:
+          images: koenighotze/render-manifest
+          tag-sha: true
+          tag-semver: |
+            {{version}}
+            {{major}}.{{minor}}
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+        with:
+          install: true
+      - name: Get Time
+        id: time
+        uses: nanzm/get-time-action@v1.1
+        with:
+          timeZone: 110 # Berlin
+          format: "YYYY-MM-DD-HH-mm-ss"
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: ${{ startsWith(github.ref, 'ref/tags/') }}
+          tags: ${{ steps.docker_meta.outputs.tags }}
+          labels: ${{ steps.docker_meta.outputs.labels }}
+          build-args: |
+            NAME=koenighotze/render-manifest
+            DESCRIPTION=Tool for rendering manifests using envsubst
+            VERSION=${{ steps.docker_meta.outputs.version }}
+            COMMIT_SHA=${{ github.sha }}
+            BUILD_TIMESTAMP=${{ steps.time.outputs.time }}
+            VCS_URL=${{ github.repository }}
