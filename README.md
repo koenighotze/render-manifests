@@ -1,6 +1,6 @@
 # Kubernetes manifest render
 
-[![CircleCI](https://circleci.com/gh/koenighotze/render-manifests/tree/master.svg?style=svg)](https://circleci.com/gh/koenighotze/render-manifests/tree/master)
+![build](https://github.com/koenighotze/render-manifests/workflows/build/badge.svg)
 
 This Docker image can be used as part of a build to render the manifests from `./deployment` to `./rendered`. It basically wraps [envsubst](https://linux.die.net/man/1/envsubst) in a reusable fashion.
 
