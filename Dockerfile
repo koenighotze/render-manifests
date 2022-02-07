@@ -1,6 +1,6 @@
-FROM alpine:3.12.1
+FROM alpine:3.14.3
 
-RUN apk add --no-cache bash=5.0.17-r0 gettext=0.20.2-r0
+RUN apk add --no-cache bash=5.1.4-r0 gettext=0.21-r0
 
 ENV REVISION=${REVISION}
 
