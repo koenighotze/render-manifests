@@ -6,7 +6,7 @@ jobs:
   lint:
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v3.1.0
+      - uses: actions/checkout@v3.3.0
       - run: |
           docker run -i hadolint/hadolint < Dockerfile
 
@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-20.04
     needs: lint
     steps:
-      - uses: actions/checkout@v3.1.0
+      - uses: actions/checkout@v3.3.0
       - name: Docker meta
         id: docker_meta
         uses: crazy-max/ghaction-docker-meta@v3.6.2
