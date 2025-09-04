@@ -30,7 +30,7 @@ jobs:
           install: true
       - name: Get Time
         id: time
-        uses: nanzm/get-time-action@v1.1
+        uses: nanzm/get-time-action@v2.0
         with:
           timeZone: 110 # Berlin
           format: "YYYY-MM-DD-HH-mm-ss"
